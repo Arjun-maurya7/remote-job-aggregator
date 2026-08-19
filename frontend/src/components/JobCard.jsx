@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Building, Calendar, DollarSign, ExternalLink, ArrowRight } from 'lucide-react';
-import { decodeHTMLEntities, formatDate, formatSalary, cleanExcerpt } from '../utils/format';
+import { MapPin, Calendar, DollarSign, ArrowRight } from 'lucide-react';
+import {
+  decodeHTMLEntities,
+  formatDate,
+  formatSalary,
+  cleanExcerpt,
+  getCompanyAvatarStyle,
+} from '../utils/format';
 
 /**
  * JobCard Component
  *
- * Renders a professional, recruiter-ready job listing card.
+ * Premium dark glass job card with staggered entrance animation,
+ * glossy top line, left accent border on hover, deterministic
+ * avatar palettes, badge tags, and tactile action buttons.
  */
-export function JobCard({ job }) {
+export function JobCard({ job, index = 0 }) {
   const [logoError, setLogoError] = useState(false);
 
   const decodedTitle = decodeHTMLEntities(job.title);
@@ -16,94 +24,100 @@ export function JobCard({ job }) {
   const decodedLocation = decodeHTMLEntities(job.location);
   const companyLogoUrl = job.company_logo || job.companyLogo;
   const companyInitial = decodedCompany ? decodedCompany.charAt(0).toUpperCase() : 'J';
+  const avatarStyle = getCompanyAvatarStyle(decodedCompany);
+
+  // Staggered entrance: each card delays by 60ms × its index, capped at 480ms
+  const delay = Math.min(index * 60, 480);
 
   return (
-    <article className="job-card">
-      <div className="job-card-top">
-        {/* Company Logo / Fallback Avatar */}
-        <div className="company-logo-container">
+    <article
+      className="glass-job-card"
+      style={{ '--card-delay': `${delay}ms` }}
+    >
+      {/* Top Card Row */}
+      <div className="card-top-row">
+        <div className="avatar-wrapper">
           {companyLogoUrl && !logoError ? (
             <img
               src={companyLogoUrl}
               alt={`${decodedCompany} logo`}
-              className="company-logo-img"
+              className="avatar-image"
               onError={() => setLogoError(true)}
             />
           ) : (
-            <div className="company-logo-fallback">{companyInitial}</div>
+            <div
+              className="avatar-fallback"
+              style={{
+                background: avatarStyle.bg,
+                color: avatarStyle.color,
+                borderColor: avatarStyle.border,
+              }}
+            >
+              {companyInitial}
+            </div>
           )}
         </div>
 
-        {/* Title & Company */}
-        <div className="job-card-title-area">
-          <Link to={`/jobs/${job.id}`} className="job-card-title">
+        <div className="card-title-block">
+          <Link to={`/jobs/${job.id}`} className="card-job-title">
             {decodedTitle}
           </Link>
-          <div className="job-card-company">
-            <Building className="w-4 h-4 text-slate-400" />
-            <span>{decodedCompany}</span>
-          </div>
+          <p className="card-company-name">{decodedCompany}</p>
         </div>
-
-        {/* Location Badge */}
-        {decodedLocation && (
-          <div className="job-card-location-badge">
-            <MapPin className="w-3.5 h-3.5 text-slate-500" />
-            <span>{decodedLocation}</span>
-          </div>
-        )}
       </div>
 
-      {/* Metadata Badges */}
-      <div className="job-badges-row">
+      {/* Badges Row */}
+      <div className="card-badges-row">
         {(job.employment_type || []).map((type, idx) => (
-          <span key={idx} className="badge badge-indigo">
+          <span key={`emp-${idx}`} className="pill-badge pill-indigo">
             {decodeHTMLEntities(type)}
           </span>
         ))}
         {(job.industry || []).map((ind, idx) => (
-          <span key={idx} className="badge badge-slate">
+          <span key={`ind-${idx}`} className="pill-badge pill-slate">
             {decodeHTMLEntities(ind)}
           </span>
         ))}
         {job.job_level && (
-          <span className="badge badge-purple">
+          <span className="pill-badge pill-purple">
             {decodeHTMLEntities(job.job_level)}
           </span>
         )}
       </div>
 
-      {/* Excerpt Summary */}
-      <p className="job-card-excerpt">{cleanExcerpt(job.excerpt)}</p>
-
-      {/* Card Footer Meta & Actions */}
-      <div className="job-card-footer">
-        <div className="job-card-meta">
-          <div className="meta-item salary">
+      {/* Footer Meta & Actions */}
+      <div className="card-footer-row">
+        <div className="card-meta-left">
+          {decodedLocation && (
+            <div className="meta-pill">
+              <MapPin className="w-3.5 h-3.5" />
+              <span>{decodedLocation}</span>
+            </div>
+          )}
+          <div className="meta-pill salary">
             <DollarSign className="w-3.5 h-3.5" />
             <span>{formatSalary(job)}</span>
           </div>
-          <div className="meta-item">
+          <div className="meta-pill date">
             <Calendar className="w-3.5 h-3.5" />
             <span>{formatDate(job.published_at)}</span>
           </div>
         </div>
 
-        <div className="job-card-actions">
-          <Link to={`/jobs/${job.id}`} className="btn-secondary">
-            <span>View Job</span>
+        <div className="card-actions-right">
+          <Link to={`/jobs/${job.id}`} className="btn-glass-secondary">
+            <span>View</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </Link>
           <a
             href={job.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-primary"
+            className="btn-gradient-primary"
             onClick={(e) => e.stopPropagation()}
-            aria-label={`Apply for ${decodedTitle} at ${decodedCompany} (opens in new tab)`}
+            aria-label={`Apply for ${decodedTitle} at ${decodedCompany} (opens in new window)`}
           >
             <span>Apply ↗</span>
-            <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
       </div>

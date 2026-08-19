@@ -1,32 +1,37 @@
 import React from 'react';
 
 /**
- * Loading Component
+ * Loading Skeleton Component
  *
- * Renders skeleton card placeholders during API data fetching.
+ * Dark-themed skeleton job cards with animated shimmer wave,
+ * matching the glass-card structure of JobCard.
  */
 export function Loading() {
   return (
-    <div className="job-cards-stack" aria-busy="true" aria-label="Loading jobs">
-      {[1, 2, 3].map((i) => (
-        <div key={i} className="skeleton-card animate-pulse">
-          <div className="flex items-start gap-4 mb-4">
-            <div className="skeleton-box w-12 h-12 rounded-lg flex-shrink-0"></div>
-            <div className="flex-1 space-y-2">
-              <div className="skeleton-box h-5 w-1/2"></div>
-              <div className="skeleton-box h-4 w-1/4"></div>
+    <div className="job-cards-stack" aria-busy="true" aria-label="Loading job listings">
+      {[1, 2, 3, 4, 5, 6].map((i) => (
+        <div key={i} className="glass-skeleton-card animate-shimmer">
+          <div className="skeleton-top-bar">
+            <div className="skeleton-avatar-box" />
+            <div className="skeleton-text-group">
+              <div className="skeleton-line-title" />
+              <div className="skeleton-line-sub" />
             </div>
           </div>
-          <div className="flex gap-2 mb-4">
-            <div className="skeleton-box h-5 w-20 rounded-full"></div>
-            <div className="skeleton-box h-5 w-24 rounded-full"></div>
-            <div className="skeleton-box h-5 w-16 rounded-full"></div>
+          <div className="skeleton-pills-bar">
+            <div className="skeleton-pill" />
+            <div className="skeleton-pill" style={{ width: '96px' }} />
+            <div className="skeleton-pill" style={{ width: '64px' }} />
           </div>
-          <div className="skeleton-box h-4 w-full mb-2"></div>
-          <div className="skeleton-box h-4 w-3/4 mb-4"></div>
-          <div className="flex items-center justify-between pt-3 border-t border-slate-100">
-            <div className="skeleton-box h-4 w-1/3"></div>
-            <div className="skeleton-box h-8 w-24 rounded-md"></div>
+          <div className="skeleton-line-body" />
+          <div className="skeleton-line-body" style={{ width: '80%' }} />
+          <div className="skeleton-line-body" style={{ width: '60%' }} />
+          <div className="skeleton-footer-bar">
+            <div className="skeleton-line-sub" style={{ width: '40%' }} />
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="skeleton-btn-box" />
+              <div className="skeleton-btn-box" />
+            </div>
           </div>
         </div>
       ))}

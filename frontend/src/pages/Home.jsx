@@ -7,12 +7,13 @@ import { Pagination } from '../components/Pagination';
 import { Loading } from '../components/Loading';
 
 import { getJobs, runIngestion } from '../services/api';
-import { SearchX, ServerOff } from 'lucide-react';
+import { SearchX, ServerOff, RotateCcw } from 'lucide-react';
 
 /**
- * Home Page (Dashboard)
+ * Home Page Component
  *
- * Renders main job dashboard with search, filters, results summary, job cards, loading, error, and empty states.
+ * Primary application dashboard with search, filter toolbar, results counter,
+ * glass job card stack, loading skeletons, empty states, and error handling.
  */
 export function Home() {
   const [data, setData] = useState({ items: [], page: 1, limit: 20, total: 0, pages: 0 });
@@ -44,7 +45,8 @@ export function Home() {
         const response = await getJobs(filters);
         if (!ignore) setData(response);
       } catch (err) {
-        if (!ignore) setError(err.message || 'Unable to load jobs. Please check that the API server is running.');
+        if (!ignore)
+          setError(err.message || 'Unable to load jobs. Please check that the API server is running.');
       } finally {
         if (!ignore) setLoading(false);
       }
@@ -111,6 +113,7 @@ export function Home() {
 
   return (
     <div className="app-shell">
+      {/* Floating Navbar */}
       <Header
         onSync={handleSyncJobs}
         isSyncing={isSyncing}
@@ -118,74 +121,80 @@ export function Home() {
         syncError={syncError}
       />
 
-      <main className="main-container">
-        {/* Search & Filter Controls */}
+      <main className="main-content-layout">
+        {/* Hero & Search Header */}
         <SearchBar value={filters.search} onSearch={handleSearch} />
+
+        {/* Filter Toolbar */}
         <Filters
           filters={filters}
           onChange={handleFilterChange}
           onReset={handleResetFilters}
         />
 
-        {/* Results Header Summary Row */}
+        {/* Results Header Summary Bar */}
         {!loading && !error && (
-          <div className="results-header-bar">
+          <div className="results-header-container">
             <div>
-              <h3 className="results-heading">Remote Jobs</h3>
-              <p className="results-counter">
-                {data.total} {data.total === 1 ? 'job' : 'jobs'} found
-                {filters.search && <span> for "{filters.search}"</span>}
+              <h2 className="results-main-title">Remote opportunities</h2>
+              <p className="results-count-text">
+                {data.total} {data.total === 1 ? 'job available' : 'jobs available'}
+                {filters.search && <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}> for "{filters.search}"</span>}
               </p>
             </div>
 
-            {data.pages > 1 && (
-              <span className="results-page-indicator">
-                Page {data.page} of {data.pages}
-              </span>
-            )}
+            <div className="results-live-indicator">
+              <span className="live-dot-small" />
+              <span>Updated from Jobicy</span>
+            </div>
           </div>
         )}
 
         {/* Error State */}
         {error && (
-          <div className="status-card" role="alert">
-            <div className="status-icon-wrapper error">
-              <ServerOff className="w-7 h-7" />
+          <div className="state-card-wrapper" role="alert">
+            <div className="glass-state-card error">
+              <div className="state-icon-box error">
+                <ServerOff className="w-6 h-6" />
+              </div>
+              <h3 className="state-card-title">Unable to load jobs</h3>
+              <p className="state-card-message">
+                Something went wrong while fetching opportunities from the API. Please try again.
+              </p>
+              <button onClick={() => setFilters((f) => ({ ...f }))} className="btn-gradient-primary">
+                Try again
+              </button>
             </div>
-            <h3 className="status-title">Unable to load jobs</h3>
-            <p className="status-desc">
-              We couldn't connect to the job service. Please verify the API server is running.
-            </p>
-            <button onClick={() => setFilters((f) => ({ ...f }))} className="btn-primary">
-              Retry Loading
-            </button>
           </div>
         )}
 
-        {/* Loading Skeleton */}
+        {/* Loading Skeletons */}
         {loading && <Loading />}
 
         {/* Empty Result State */}
         {!loading && !error && data.items.length === 0 && (
-          <div className="status-card">
-            <div className="status-icon-wrapper empty">
-              <SearchX className="w-7 h-7" />
+          <div className="state-card-wrapper">
+            <div className="glass-state-card empty">
+              <div className="state-icon-box empty">
+                <SearchX className="w-6 h-6" />
+              </div>
+              <h3 className="state-card-title">No jobs found</h3>
+              <p className="state-card-message">
+                We couldn't find opportunities matching your current search and active filters.
+              </p>
+              <button onClick={handleResetFilters} className="btn-glass-secondary">
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Clear filters</span>
+              </button>
             </div>
-            <h3 className="status-title">No jobs found</h3>
-            <p className="status-desc">
-              We couldn't find any job listings matching your search or active filters.
-            </p>
-            <button onClick={handleResetFilters} className="btn-secondary">
-              Clear All Filters
-            </button>
           </div>
         )}
 
         {/* Job Cards Stack */}
         {!loading && !error && data.items.length > 0 && (
           <div className="job-cards-stack">
-            {data.items.map((job) => (
-              <JobCard key={job.id} job={job} />
+            {data.items.map((job, index) => (
+              <JobCard key={job.id} job={job} index={index} />
             ))}
           </div>
         )}
@@ -200,11 +209,11 @@ export function Home() {
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="footer-container">
-        <div className="footer-content">
-          <p>JobFinder — End-to-End Job Ingestion & Search Platform</p>
-          <p>Data legitimately ingested from public Jobicy REST API v2</p>
+      {/* Footer Bar */}
+      <footer className="glass-footer">
+        <div className="footer-inner">
+          <p>© {new Date().getFullYear()} JobFinder — Modern Job Search System</p>
+          <p className="text-slate-400">Data ingested from Jobicy REST API</p>
         </div>
       </footer>
     </div>

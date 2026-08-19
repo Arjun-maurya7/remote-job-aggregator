@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 /**
  * Pagination Component
  *
- * Renders previous/next and numerical page navigation buttons.
+ * Clean, centered glass pagination bar with active accent pill and nav arrows.
  */
 export function Pagination({ page, pages, onPageChange }) {
   if (pages <= 1) return null;
@@ -34,31 +34,31 @@ export function Pagination({ page, pages, onPageChange }) {
   };
 
   return (
-    <nav className="pagination-container" aria-label="Pagination Navigation">
+    <nav className="glass-pagination-nav" aria-label="Pagination Navigation">
       <button
         onClick={() => onPageChange(page - 1)}
         disabled={page <= 1}
-        className="pagination-btn"
+        className="pagination-nav-button"
         aria-label="Previous Page"
       >
         <ChevronLeft className="w-4 h-4" />
         <span>Previous</span>
       </button>
 
-      <div className="pagination-numbers">
+      <div className="pagination-numbers-row">
         {getPageNumbers().map((num, idx) =>
           typeof num === 'number' ? (
             <button
               key={idx}
               onClick={() => onPageChange(num)}
-              className={`page-num-btn ${page === num ? 'active' : ''}`}
+              className={`page-pill-button ${page === num ? 'is-active' : ''}`}
               aria-current={page === num ? 'page' : undefined}
               aria-label={`Page ${num}`}
             >
               {num}
             </button>
           ) : (
-            <span key={idx} className="page-ellipsis">
+            <span key={idx} className="page-dots">
               ...
             </span>
           )
@@ -68,7 +68,7 @@ export function Pagination({ page, pages, onPageChange }) {
       <button
         onClick={() => onPageChange(page + 1)}
         disabled={page >= pages}
-        className="pagination-btn"
+        className="pagination-nav-button"
         aria-label="Next Page"
       >
         <span>Next</span>

@@ -2,49 +2,49 @@ import React from 'react';
 import { MapPin, Building2, Briefcase, Layers, RotateCcw } from 'lucide-react';
 
 const LOCATION_OPTIONS = [
-  { label: 'All Locations', value: '' },
-  { label: 'Anywhere', value: 'Anywhere' },
-  { label: 'India', value: 'India' },
-  { label: 'USA', value: 'USA' },
-  { label: 'UK', value: 'UK' },
-  { label: 'Europe', value: 'Europe' },
-  { label: 'Canada', value: 'Canada' },
-  { label: 'Americas', value: 'Americas' },
+  { label: 'Location: All', value: '' },
+  { label: 'Location: Anywhere', value: 'Anywhere' },
+  { label: 'Location: India', value: 'India' },
+  { label: 'Location: USA', value: 'USA' },
+  { label: 'Location: UK', value: 'UK' },
+  { label: 'Location: Europe', value: 'Europe' },
+  { label: 'Location: Canada', value: 'Canada' },
+  { label: 'Location: Americas', value: 'Americas' },
 ];
 
 const INDUSTRY_OPTIONS = [
-  { label: 'All Industries', value: '' },
-  { label: 'Engineering', value: 'Engineering' },
-  { label: 'Creative & Design', value: 'Creative & Design' },
-  { label: 'Copywriting', value: 'Copywriting' },
-  { label: 'Data', value: 'Data' },
-  { label: 'Management', value: 'Management' },
-  { label: 'Marketing', value: 'Marketing' },
-  { label: 'Sales', value: 'Sales' },
-  { label: 'DevOps', value: 'DevOps' },
+  { label: 'Industry: All', value: '' },
+  { label: 'Industry: Engineering', value: 'Engineering' },
+  { label: 'Industry: Creative & Design', value: 'Creative & Design' },
+  { label: 'Industry: Copywriting', value: 'Copywriting' },
+  { label: 'Industry: Data', value: 'Data' },
+  { label: 'Industry: Management', value: 'Management' },
+  { label: 'Industry: Marketing', value: 'Marketing' },
+  { label: 'Industry: Sales', value: 'Sales' },
+  { label: 'Industry: DevOps', value: 'DevOps' },
 ];
 
 const EMPLOYMENT_TYPE_OPTIONS = [
-  { label: 'All Employment Types', value: '' },
-  { label: 'Full-Time', value: 'Full-Time' },
-  { label: 'Part-Time', value: 'Part-Time' },
-  { label: 'Contract', value: 'Contract' },
-  { label: 'Freelance', value: 'Freelance' },
+  { label: 'Type: All', value: '' },
+  { label: 'Type: Full-Time', value: 'Full-Time' },
+  { label: 'Type: Part-Time', value: 'Part-Time' },
+  { label: 'Type: Contract', value: 'Contract' },
+  { label: 'Type: Freelance', value: 'Freelance' },
 ];
 
 const JOB_LEVEL_OPTIONS = [
-  { label: 'All Job Levels', value: '' },
-  { label: 'Senior', value: 'Senior' },
-  { label: 'Midweight', value: 'Midweight' },
-  { label: 'Junior', value: 'Junior' },
-  { label: 'Lead', value: 'Lead' },
-  { label: 'Director', value: 'Director' },
+  { label: 'Level: All', value: '' },
+  { label: 'Level: Senior', value: 'Senior' },
+  { label: 'Level: Midweight', value: 'Midweight' },
+  { label: 'Level: Junior', value: 'Junior' },
+  { label: 'Level: Lead', value: 'Lead' },
+  { label: 'Level: Director', value: 'Director' },
 ];
 
 /**
  * Filters Component
  *
- * Horizontal filter bar with custom select controls.
+ * Floating glass toolbar with custom select controls and active state glow.
  */
 export function Filters({ filters, onChange, onReset }) {
   const hasActiveFilters = Boolean(
@@ -56,20 +56,17 @@ export function Filters({ filters, onChange, onReset }) {
   );
 
   return (
-    <div className="filter-panel">
-      <div className="filter-grid">
+    <div className="glass-filter-toolbar">
+      <div className="filter-items-grid">
         {/* Location Filter */}
-        <div className="filter-group">
-          <label className="filter-label" htmlFor="location-select">
-            <MapPin className="w-3.5 h-3.5" />
-            <span>Location</span>
-          </label>
+        <div className={`glass-select-wrapper ${filters.location ? 'is-active' : ''}`}>
+          <MapPin className="select-icon" />
           <select
             id="location-select"
             value={filters.location || ''}
             onChange={(e) => onChange('location', e.target.value)}
-            className="filter-select"
-            aria-label="Filter by Location"
+            className="glass-select-control"
+            aria-label="Location Filter"
           >
             {LOCATION_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -80,17 +77,14 @@ export function Filters({ filters, onChange, onReset }) {
         </div>
 
         {/* Industry Filter */}
-        <div className="filter-group">
-          <label className="filter-label" htmlFor="industry-select">
-            <Building2 className="w-3.5 h-3.5" />
-            <span>Industry</span>
-          </label>
+        <div className={`glass-select-wrapper ${filters.industry ? 'is-active' : ''}`}>
+          <Building2 className="select-icon" />
           <select
             id="industry-select"
             value={filters.industry || ''}
             onChange={(e) => onChange('industry', e.target.value)}
-            className="filter-select"
-            aria-label="Filter by Industry"
+            className="glass-select-control"
+            aria-label="Industry Filter"
           >
             {INDUSTRY_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -101,17 +95,14 @@ export function Filters({ filters, onChange, onReset }) {
         </div>
 
         {/* Employment Type Filter */}
-        <div className="filter-group">
-          <label className="filter-label" htmlFor="employment-type-select">
-            <Briefcase className="w-3.5 h-3.5" />
-            <span>Employment Type</span>
-          </label>
+        <div className={`glass-select-wrapper ${filters.employment_type ? 'is-active' : ''}`}>
+          <Briefcase className="select-icon" />
           <select
             id="employment-type-select"
             value={filters.employment_type || ''}
             onChange={(e) => onChange('employment_type', e.target.value)}
-            className="filter-select"
-            aria-label="Filter by Employment Type"
+            className="glass-select-control"
+            aria-label="Employment Type Filter"
           >
             {EMPLOYMENT_TYPE_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -122,17 +113,14 @@ export function Filters({ filters, onChange, onReset }) {
         </div>
 
         {/* Job Level Filter */}
-        <div className="filter-group">
-          <label className="filter-label" htmlFor="job-level-select">
-            <Layers className="w-3.5 h-3.5" />
-            <span>Job Level</span>
-          </label>
+        <div className={`glass-select-wrapper ${filters.job_level ? 'is-active' : ''}`}>
+          <Layers className="select-icon" />
           <select
             id="job-level-select"
             value={filters.job_level || ''}
             onChange={(e) => onChange('job_level', e.target.value)}
-            className="filter-select"
-            aria-label="Filter by Job Level"
+            className="glass-select-control"
+            aria-label="Job Level Filter"
           >
             {JOB_LEVEL_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -141,16 +129,20 @@ export function Filters({ filters, onChange, onReset }) {
             ))}
           </select>
         </div>
-      </div>
 
-      {hasActiveFilters && (
-        <div className="filter-actions">
-          <button onClick={onReset} className="reset-filter-btn" type="button">
+        {/* Clear Filters Action */}
+        {hasActiveFilters && (
+          <button
+            onClick={onReset}
+            className="btn-clear-filters"
+            type="button"
+            title="Reset active search and filters"
+          >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset All Filters</span>
+            <span>Clear filters</span>
           </button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
