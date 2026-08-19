@@ -1,6 +1,6 @@
 # Job Ingestion & Search Platform
 
-A reliable, production-ready remote job ingestion and search platform built with Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic, Docker, and React + JavaScript.
+A reliable, deployment-ready MVP remote job ingestion and search platform built with Python, FastAPI, SQLAlchemy, PostgreSQL, Alembic, Docker, and React + JavaScript.
 
 ---
 
@@ -21,7 +21,7 @@ This project is an end-to-end job ingestion and search platform. It retrieves pu
 - **Search, Filtering & Pagination**: Performs case-insensitive broad keyword search (`ILIKE`), location/job-level filtering, PostgreSQL `TEXT[]` array containment filtering (`ANY`), and page-based offset pagination (`published_at DESC NULLS LAST, id DESC`).
 - **Alembic Database Migrations**: Manages production database schema changes cleanly through revision scripts.
 - **React + JavaScript Dashboard**: User-friendly frontend dashboard with search inputs, dropdown filters, pagination controls, DOMPurify HTML sanitization, and manual sync ingestion triggers.
-- **Containerized Architecture**: Production `Dockerfile` configurations for FastAPI backend and multi-stage Nginx frontend build, orchestrated via `compose.yml`.
+- **Containerized Architecture**: Docker configurations (`Dockerfile`, `compose.yml`) are present to support containerized local development and future deployment flexibility (note: currently unverified for production).
 
 ---
 
@@ -253,7 +253,7 @@ docker compose up --build
 
 ## Testing
 
-Execute the complete 41-test backend test suite against PostgreSQL:
+Execute the complete backend test suite against PostgreSQL:
 
 ```bash
 .venv\Scripts\pytest tests/ -v
