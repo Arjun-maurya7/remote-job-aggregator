@@ -5,7 +5,6 @@ import {
   decodeHTMLEntities,
   formatDate,
   formatSalary,
-  cleanExcerpt,
   getCompanyAvatarStyle,
 } from '../utils/format';
 

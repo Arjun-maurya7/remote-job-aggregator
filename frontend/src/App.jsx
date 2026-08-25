@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
 import { JobDetails } from './pages/JobDetails';
+import { BackendWakeScreen } from './components/BackendWakeScreen';
 
 /**
  * Main App Component
@@ -12,12 +13,14 @@ import { JobDetails } from './pages/JobDetails';
  */
 export function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/jobs/:id" element={<JobDetails />} />
-      </Routes>
-    </BrowserRouter>
+    <BackendWakeScreen>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/jobs/:id" element={<JobDetails />} />
+        </Routes>
+      </BrowserRouter>
+    </BackendWakeScreen>
   );
 }
 

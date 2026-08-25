@@ -8,6 +8,25 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
 
 /**
+ * Check backend health.
+ *
+ * @param {AbortSignal} signal - Optional abort signal for timeout cancellation
+ * @returns {Promise<boolean>} True if status is ok
+ */
+export async function checkHealth(signal) {
+  const url = `${API_BASE_URL}/health`;
+  const response = await fetch(url, { signal });
+  if (!response.ok) {
+    throw new Error('Health check failed');
+  }
+  const data = await response.json();
+  if (data.status !== 'ok') {
+    throw new Error('Backend not ready');
+  }
+  return true;
+}
+
+/**
  * Fetch a paginated and filtered list of jobs from GET /jobs.
  *
  * @param {Object} params - Query parameters (search, location, employment_type, industry, job_level, page, limit)

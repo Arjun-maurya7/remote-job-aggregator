@@ -19,6 +19,7 @@ This project is an end-to-end job ingestion and search platform. It retrieves pu
 - **Decoupled Timestamp Semantics**: Separates original database creation time (`created_at`) from source retrieval timestamp (`fetched_at`).
 - **FastAPI REST Endpoints**: Implements `/`, `/health` (with `SELECT 1` DB ping), `/jobs`, `/jobs/{id}`, and `/ingestion/run`.
 - **Search, Filtering & Pagination**: Performs case-insensitive broad keyword search (`ILIKE`), location/job-level filtering, PostgreSQL `TEXT[]` array containment filtering (`ANY`), and page-based offset pagination (`published_at DESC NULLS LAST, id DESC`).
+- **Cold-Start Resilience & Wake Screen**: Handles free-tier/serverless backend cold starts (e.g., Render, Fly.io) gracefully with an animated orbit spinner, real-time status updates, health-check polling, and smooth fade transitions.
 - **Alembic Database Migrations**: Manages production database schema changes cleanly through revision scripts.
 - **React + JavaScript Dashboard**: User-friendly frontend dashboard with search inputs, dropdown filters, pagination controls, DOMPurify HTML sanitization, and manual sync ingestion triggers.
 - **Containerized Architecture**: Docker configurations (`Dockerfile`, `compose.yml`) are present to support containerized local development and future deployment flexibility (note: currently unverified for production).
@@ -104,7 +105,7 @@ project2/
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── components/        # Header, SearchBar, Filters, JobCard, Pagination, Loading
+│   │   ├── components/        # BackendWakeScreen, Header, SearchBar, Filters, JobCard, Pagination, Loading
 │   │   ├── pages/             # Home (Dashboard) & JobDetails pages
 │   │   ├── services/          # Centralized JavaScript API fetch service (api.js)
 │   │   ├── App.jsx            # React Router route configuration
